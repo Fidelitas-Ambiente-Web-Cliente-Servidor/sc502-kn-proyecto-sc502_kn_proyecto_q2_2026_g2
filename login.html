@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar sesión - CarpoolMatch CR</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="auth-body">
+
+    <header class="header">
+        <div class="brand">
+            <h1>CarpoolMatch CR</h1>
+            <p>Viajes compartidos en Costa Rica</p>
+        </div>
+
+        <nav class="nav">
+            <a href="index.html">Inicio</a>
+            <a href="login.html">Iniciar sesión</a>
+            <a href="registro.html" class="nav-btn">Registrarse</a>
+        </nav>
+    </header>
+
+    <main class="auth container">
+        <section class="auth-info">
+            <span class="tag tag-light">Bienvenido</span>
+
+            <h2>Inicia sesión y continúa usando la plataforma</h2>
+
+            <p>
+                Accede a tu cuenta para buscar viajes, publicar rutas y gestionar solicitudes
+                de forma sencilla y ordenada.
+            </p>
+
+            <div class="auth-points">
+                <div class="auth-point">
+                    <h3>Buscar viajes</h3>
+                    <p>Consulta rutas disponibles según origen, destino y horario.</p>
+                </div>
+
+                <div class="auth-point">
+                    <h3>Publicar rides</h3>
+                    <p>Comparte los espacios disponibles de tu vehículo.</p>
+                </div>
+
+                <div class="auth-point">
+                    <h3>Gestionar solicitudes</h3>
+                    <p>Revisa el estado de tus solicitudes y viajes.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="auth-card card">
+            <h2>Iniciar sesión</h2>
+            <p class="auth-subtitle">Ingresa tus datos para acceder a CarpoolMatch CR</p>
+
+            <form id="formLogin" class="form">
+                <label for="correoLogin">Correo electrónico</label>
+                <input type="email" id="correoLogin" placeholder="ejemplo@correo.com">
+
+                <label for="passwordLogin">Contraseña</label>
+                <input type="password" id="passwordLogin" placeholder="Ingrese su contraseña"></div>
+
+                <div class="form-row">
+                    <label class="check">
+                        <input type="checkbox">
+                        Recordar sesión
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary full">Ingresar</button>
+            </form>
+
+            <p id="mensajeLogin" class="message"></p>
+
+            <p class="switch-text">
+                ¿No tienes cuenta? <a href="registro.html">Regístrate aquí</a>
+            </p>
+        </section>
+    </main>
+
+    <script src="js/app.js"></script>
+</body>
+
+</html>
