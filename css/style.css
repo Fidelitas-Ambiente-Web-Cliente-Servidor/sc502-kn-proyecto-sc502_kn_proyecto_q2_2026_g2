@@ -75,61 +75,6 @@ a {
     color: white !important;
 }
 
-.hero {
-    padding: 45px 0 22px;
-    display: grid;
-    grid-template-columns: 1.05fr 0.95fr;
-    gap: 26px;
-    align-items: stretch;
-}
-
-.card {
-    background: white;
-    color: #0f172a;
-    border-radius: 24px;
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
-}
-
-.hero-text {
-    padding: 42px;
-}
-
-.tag {
-    display: inline-block;
-    background: #dbeafe;
-    color: #2563eb;
-    padding: 8px 14px;
-    border-radius: 999px;
-    font-size: 14px;
-    font-weight: bold;
-}
-
-.tag-light {
-    background: #334155;
-    color: white;
-}
-
-.hero-text h2 {
-    font-size: 54px;
-    line-height: 1.05;
-    margin: 18px 0;
-    color: #0f172a;
-}
-
-.hero-text p {
-    font-size: 18px;
-    line-height: 1.7;
-    color: #475569;
-    margin-bottom: 0;
-}
-
-.actions {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    margin-top: 28px;
-}
-
 .btn {
     padding: 14px 22px;
     border-radius: 14px;
@@ -160,6 +105,56 @@ a {
 
 .full {
     width: 100%;
+}
+
+.card {
+    background: white;
+    color: #0f172a;
+    border-radius: 24px;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
+}
+
+.tag {
+    display: inline-block;
+    background: #dbeafe;
+    color: #2563eb;
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.hero {
+    padding: 45px 0 22px;
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 26px;
+    align-items: stretch;
+}
+
+.hero-text {
+    padding: 42px;
+}
+
+.hero-text h2 {
+    font-size: 54px;
+    line-height: 1.05;
+    margin: 18px 0;
+    color: #0f172a;
+}
+
+.hero-text p {
+    font-size: 18px;
+    line-height: 1.7;
+    color: #475569;
+    margin-bottom: 0;
+}
+
+.actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 28px;
 }
 
 .stats {
@@ -303,7 +298,6 @@ a {
 }
 
 .search h2,
-.auth-card h2,
 .info-card h3,
 .simple-card h3,
 .ride-small h3 {
@@ -312,15 +306,12 @@ a {
 
 .search h2,
 .section-title h2,
-.auth-card h2,
-.auth-info h2,
 .cta-box h2 {
     margin-top: 0;
     margin-bottom: 12px;
 }
 
 .search p,
-.auth-subtitle,
 .cta-box p {
     color: #64748b;
     line-height: 1.6;
@@ -333,8 +324,7 @@ a {
     margin-top: 20px;
 }
 
-.search-form input,
-.form input {
+.search-form input {
     width: 100%;
     padding: 14px 15px;
     border: 1px solid #dbe1ea;
@@ -345,8 +335,7 @@ a {
     color: #0f172a;
 }
 
-.search-form input:focus,
-.form input:focus {
+.search-form input:focus {
     border-color: #93c5fd;
     box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
 }
@@ -451,6 +440,8 @@ section.container {
     color: #2563eb;
 }
 
+/* FOOTER */
+
 .footer {
     background: #020617;
     color: #cbd5e1;
@@ -458,78 +449,46 @@ section.container {
     padding: 18px;
 }
 
-.auth-body {
-    background: #0f172a;
+.login-simple-body {
+    background-color: #0f172a;
+    background-image: url("../img/carpool-bg.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     min-height: 100vh;
 }
 
-.auth {
-    padding: 42px 0;
-    display: grid;
-    grid-template-columns: 1fr 0.95fr;
-    gap: 26px;
-    align-items: stretch;
+.login-simple {
+    min-height: calc(100vh - 95px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
 }
 
-.auth-info {
-    background: #1e293b;
-    color: white;
-    border-radius: 28px;
-    padding: 38px;
+.login-card {
+    width: 100%;
+    max-width: 430px;
+    background: rgba(255, 255, 255, 0.95);
+    color: #0f172a;
+    padding: 36px;
+    border-radius: 24px;
     box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
 }
 
-.auth-info h2 {
-    font-size: 42px;
-    line-height: 1.1;
-    margin-top: 18px;
-    color: white;
-}
-
-.auth-info p {
-    color: #cbd5e1;
-    line-height: 1.6;
-}
-
-.auth-points {
-    display: grid;
-    gap: 14px;
-    margin-top: 22px;
-}
-
-.auth-point {
-    background: #111827;
-    border-radius: 18px;
-    padding: 18px;
-    border: 1px solid #334155;
-}
-
-.auth-point h3 {
-    color: white;
+.login-card h2 {
+    text-align: center;
     margin-top: 0;
-    margin-bottom: 8px;
-}
-
-.auth-point p {
-    color: #cbd5e1;
-    margin-top: 0;
-}
-
-.auth-card {
-    padding: 34px;
-    background: white;
+    margin-bottom: 10px;
+    font-size: 32px;
     color: #0f172a;
 }
 
-.auth-card h2 {
-    color: #0f172a;
-    margin-top: 0;
-    margin-bottom: 12px;
-}
-
-.auth-subtitle {
+.login-card p {
+    text-align: center;
     color: #64748b;
     line-height: 1.6;
+    margin-bottom: 24px;
 }
 
 .form label {
@@ -538,23 +497,35 @@ section.container {
     font-weight: bold;
 }
 
-.password-group {
-    display: flex;
-    gap: 8px;
+.form input {
+    width: 100%;
+    padding: 14px 15px;
+    border: 1px solid #dbe1ea;
+    border-radius: 14px;
+    font-size: 15px;
+    outline: none;
+    background: white;
+    color: #0f172a;
 }
 
+.form input:focus {
+    border-color: #93c5fd;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+}
 
 .form-row {
     margin-top: 14px;
+    margin-bottom: 18px;
 }
 
 .check {
-    display: flex;
+    display: flex !important;
     align-items: center;
     gap: 8px;
     color: #475569;
     font-size: 14px;
     margin-top: 14px;
+    font-weight: normal !important;
 }
 
 .check input {
@@ -570,13 +541,11 @@ section.container {
 @media (max-width: 1024px) {
 
     .hero,
-    .auth,
     .grid-4 {
         grid-template-columns: 1fr 1fr;
     }
 
-    .hero-text h2,
-    .auth-info h2 {
+    .hero-text h2 {
         font-size: 42px;
     }
 }
@@ -584,7 +553,6 @@ section.container {
 @media (max-width: 900px) {
 
     .hero,
-    .auth,
     .search-form,
     .grid-3,
     .grid-4,
@@ -618,19 +586,24 @@ section.container {
     .search,
     .info-card,
     .simple-card,
-    .auth-card,
-    .auth-info,
     .cta-box {
         padding: 24px;
     }
 
     .hero-text h2,
-    .section-title h2,
-    .auth-info h2 {
+    .section-title h2 {
         font-size: 32px;
     }
 
     .brand h1 {
+        font-size: 28px;
+    }
+
+    .login-card {
+        padding: 26px;
+    }
+
+    .login-card h2 {
         font-size: 28px;
     }
 }
