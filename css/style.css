@@ -696,6 +696,49 @@ section.container {
     color: #334155;
 }
 
+.usuario-header {
+    background: #1e293b;
+    color: #e2e8f0;
+    padding: 10px 14px;
+    border-radius: 14px;
+    font-size: 14px;
+    font-weight: bold;
+    border: 1px solid #334155;
+}
+
+.usuario-header span {
+    color: #93c5fd;
+}
+
+.usuario-header.oculto {
+    display: none;
+}
+
+.logout-icon {
+    width: 42px;
+    height: 42px;
+    display: grid !important;
+    place-items: center;
+    border-radius: 50% !important;
+    background: #1e293b;
+    border: 1px solid #334155;
+    padding: 0 !important;
+}
+
+.logout-icon svg {
+    width: 22px;
+    height: 22px;
+    fill: #f87171;
+}
+
+.logout-icon:hover {
+    background: #7f1d1d !important;
+}
+
+.logout-icon:hover svg {
+    fill: white;
+}
+
 @media (max-width: 1024px) {
     .hero,
     .grid-4 {
