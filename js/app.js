@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", function () {
         formularioRegistro.addEventListener("submit", registrarUsuario);
     }
 
-    // Adaptado al ID del input real del HTML ('correo' en el login simple)
     const correoInput = document.getElementById("correoLogin") || document.getElementById("correo");
     const correoGuardado = localStorage.getItem("correoRecordado");
 
@@ -26,11 +25,10 @@ document.addEventListener("DOMContentLoaded", function () {
 function iniciarSesion(evento) {
     evento.preventDefault();
 
-    // Compatibilidad con los IDs reales del formulario de login
     const correoInput = document.getElementById("correoLogin") || document.getElementById("correo");
     const passwordInput = document.getElementById("passwordLogin") || document.getElementById("password");
     const recordarCheck = document.getElementById("recordarSesion");
-    const mensaje = document.getElementById("mensajeLogin") || document.getElementById("mensajeRegistro"); // fallback de mensajería
+    const mensaje = document.getElementById("mensajeLogin");
 
     const correo = correoInput ? correoInput.value.trim() : "";
     const password = passwordInput ? passwordInput.value : "";
@@ -58,9 +56,8 @@ function iniciarSesion(evento) {
     console.log("Inicio de sesión correcto");
     console.log("Correo ingresado:", correo);
 
-    // CORREGIDO: Redirección usando ruta relativa explícita para el contenedor Docker
     setTimeout(function () {
-        window.location.href = "./index.html";
+        window.location.href = "dashboard.html";
     }, 1000);
 }
 
@@ -122,8 +119,7 @@ function registrarUsuario(evento) {
     console.log("Usuario registrado correctamente");
     console.log(usuario);
 
-    // CORREGIDO: Redirección usando ruta relativa explícita para el entregable
     setTimeout(function () {
-        window.location.href = "./login.html";
+        window.location.href = "login.html";
     }, 1000);
 }
