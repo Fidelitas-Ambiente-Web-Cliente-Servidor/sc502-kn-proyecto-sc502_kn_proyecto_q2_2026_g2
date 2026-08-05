@@ -1,14 +1,16 @@
 <?php
 
-$host = "localhost";
+$servidor = "localhost";
 $usuario = "root";
 $password = "";
-$bd = "carpoolmatch";
+$baseDatos = "carpoolmatch";
 
-$conn = new mysqli($host, $usuario, $password, $bd);
+$conexion = mysqli_connect($servidor, $usuario, $password, $baseDatos);
 
-if ($conn->connect_error) {
-    die("Error de conexión: " . $conn->connect_error);
+if (!$conexion) {
+    die("Error de conexión: " . mysqli_connect_error());
 }
+
+mysqli_set_charset($conexion, "utf8");
 
 ?>
