@@ -32,7 +32,7 @@ $tipoUsuario = $_SESSION["tipo_usuario"];
         <nav class="nav">
             <a href="index.html">Inicio</a>
             <a href="dashboard.php" class="nav-btn">Dashboard</a>
-            <a href="#">Viajes</a>
+            <a href="viajes.php">Viajes</a>
             <a href="#">Solicitudes</a>
             <a href="#">Perfil</a>
             <a href="php/logout.php" class="logout-icon" title="Cerrar sesión">
@@ -135,8 +135,8 @@ $tipoUsuario = $_SESSION["tipo_usuario"];
                 <h3>Acciones rápidas</h3>
 
                 <div class="quick-actions">
-                    <a href="#" class="btn btn-primary full">Buscar viaje</a>
-                    <a href="#" class="btn btn-secondary full">Publicar ruta</a>
+                    <a href="viajes.php" class="btn btn-primary full">Buscar viaje</a>
+<a href="publicar-viaje.php" class="btn btn-secondary full">Publicar ruta</a>
                     <a href="#" class="btn btn-secondary full">Ver solicitudes</a>
                     <a href="#" class="btn btn-secondary full">Editar perfil</a>
                 </div>
