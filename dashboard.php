@@ -63,7 +63,7 @@ $consultaActividad = "SELECT viajes.punto_salida,
                             viajes.destino,
                             solicitudes.fecha_solicitud AS fecha_hora,
                             solicitudes.estado_solicitud AS estado,
-                            'Solicitud' AS tipo
+                            'Solicitud enviada' AS tipo
                      FROM solicitudes
                      INNER JOIN viajes ON solicitudes.id_viaje = viajes.id_viaje
                      WHERE solicitudes.id_pasajero = ?
@@ -100,7 +100,8 @@ $resultadoActividad = mysqli_stmt_get_result($stmtActividad);
             <a href="dashboard.php" class="nav-btn">Dashboard</a>
             <a href="viajes.php">Viajes</a>
             <a href="publicar-viaje.php">Publicar viaje</a>
-            <a href="solicitudes.php">Solicitudes</a>
+            <a href="solicitudes.php">Mis solicitudes</a>
+            <a href="solicitudes-recibidas.php">Recibidas</a>
             <a href="perfil.php">Perfil</a>
             <a href="php/logout.php" class="logout-icon" title="Cerrar sesión">
                 <svg viewBox="0 0 24 24">
@@ -207,7 +208,8 @@ $resultadoActividad = mysqli_stmt_get_result($stmtActividad);
                 <div class="quick-actions">
                     <a href="viajes.php" class="btn btn-primary full">Buscar viaje</a>
                     <a href="publicar-viaje.php" class="btn btn-secondary full">Publicar ruta</a>
-                    <a href="solicitudes.php" class="btn btn-secondary full">Ver solicitudes</a>
+                    <a href="solicitudes.php" class="btn btn-secondary full">Mis solicitudes</a>
+                    <a href="solicitudes-recibidas.php" class="btn btn-secondary full">Solicitudes recibidas</a>
                     <a href="perfil.php" class="btn btn-secondary full">Editar perfil</a>
                 </div>
             </article>

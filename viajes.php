@@ -49,7 +49,8 @@ $resultado = mysqli_query($conexion, $consulta);
             <a href="dashboard.php">Dashboard</a>
             <a href="viajes.php" class="nav-btn">Viajes</a>
             <a href="publicar-viaje.php">Publicar viaje</a>
-            <a href="solicitudes.php">Solicitudes</a>
+            <a href="solicitudes.php">Mis solicitudes</a>
+            <a href="solicitudes-recibidas.php">Recibidas</a>
             <a href="perfil.php">Perfil</a>
             <a href="php/logout.php" class="logout-icon" title="Cerrar sesión">
                 <svg viewBox="0 0 24 24">
@@ -73,7 +74,8 @@ $resultado = mysqli_query($conexion, $consulta);
                 <h2>Viajes disponibles</h2>
 
                 <p>
-                    Aquí puede consultar las rutas publicadas por los conductores y buscar una opción que se adapte a su traslado.
+                    Aquí puede consultar las rutas publicadas por los conductores y buscar una opción que se adapte a su
+                    traslado.
                 </p>
             </div>
 

@@ -47,7 +47,8 @@ $nombreUsuario = $usuario["nombre"];
             <a href="dashboard.php">Dashboard</a>
             <a href="viajes.php">Viajes</a>
             <a href="publicar-viaje.php">Publicar viaje</a>
-            <a href="solicitudes.php">Solicitudes</a>
+            <a href="solicitudes.php">Mis solicitudes</a>
+            <a href="solicitudes-recibidas.php">Recibidas</a>
             <a href="perfil.php" class="nav-btn">Perfil</a>
             <a href="php/logout.php" class="logout-icon" title="Cerrar sesión">
                 <svg viewBox="0 0 24 24">
@@ -88,19 +89,27 @@ $nombreUsuario = $usuario["nombre"];
 
             <form class="form" action="php/actualizar_perfil.php" method="POST">
                 <label for="nombre">Nombre completo</label>
-                <input type="text" id="nombre" name="nombre" value="<?php echo $usuario["nombre"]; ?>" autocomplete="off">
+                <input type="text" id="nombre" name="nombre" value="<?php echo $usuario["nombre"]; ?>"
+                    autocomplete="off">
 
                 <label for="correo">Correo electrónico</label>
                 <input type="email" id="correo" value="<?php echo $usuario["correo"]; ?>" readonly>
 
                 <label for="telefono">Teléfono</label>
-                <input type="tel" id="telefono" name="telefono" value="<?php echo $usuario["telefono"]; ?>" maxlength="8" inputmode="numeric" autocomplete="off">
+                <input type="tel" id="telefono" name="telefono" value="<?php echo $usuario["telefono"]; ?>"
+                    maxlength="8" inputmode="numeric" autocomplete="off">
 
                 <label for="tipoUsuario">Tipo de usuario</label>
                 <select id="tipoUsuario" name="tipoUsuario">
-                    <option value="Conductor" <?php if ($usuario["tipo_usuario"] == "Conductor") echo "selected"; ?>>Conductor</option>
-                    <option value="Pasajero" <?php if ($usuario["tipo_usuario"] == "Pasajero") echo "selected"; ?>>Pasajero</option>
-                    <option value="Ambos" <?php if ($usuario["tipo_usuario"] == "Ambos") echo "selected"; ?>>Ambos</option>
+                    <option value="Conductor" <?php if ($usuario["tipo_usuario"] == "Conductor")
+                        echo "selected"; ?>>
+                        Conductor</option>
+                    <option value="Pasajero" <?php if ($usuario["tipo_usuario"] == "Pasajero")
+                        echo "selected"; ?>>
+                        Pasajero</option>
+                    <option value="Ambos" <?php if ($usuario["tipo_usuario"] == "Ambos")
+                        echo "selected"; ?>>Ambos
+                    </option>
                 </select>
 
                 <label>Estado de la cuenta</label>
