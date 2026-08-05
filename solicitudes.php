@@ -50,7 +50,7 @@ $resultado = mysqli_stmt_get_result($stmt);
         </div>
 
         <nav class="nav">
-            <a href="index.html">Inicio</a>
+            <a href="index.php">Inicio</a>
             <a href="dashboard.php">Dashboard</a>
             <a href="viajes.php">Viajes</a>
             <a href="publicar-viaje.php">Publicar viaje</a>
