@@ -1,14 +1,80 @@
 <?php
 
 session_start();
+include "php/conexion.php";
 
 if (!isset($_SESSION["id_usuario"])) {
     header("Location: login.html");
     exit();
 }
 
+$idUsuario = $_SESSION["id_usuario"];
 $nombreUsuario = $_SESSION["nombre"];
 $tipoUsuario = $_SESSION["tipo_usuario"];
+
+$consultaViajesDisponibles = "SELECT COUNT(*) AS total FROM viajes WHERE estado = 'Activo'";
+$resultadoViajesDisponibles = mysqli_query($conexion, $consultaViajesDisponibles);
+$viajesDisponibles = mysqli_fetch_assoc($resultadoViajesDisponibles)["total"];
+
+$consultaSolicitudesPendientes = "SELECT COUNT(*) AS total 
+                                  FROM solicitudes 
+                                  WHERE estado_solicitud = 'Pendiente'";
+$resultadoSolicitudesPendientes = mysqli_query($conexion, $consultaSolicitudesPendientes);
+$solicitudesPendientes = mysqli_fetch_assoc($resultadoSolicitudesPendientes)["total"];
+
+$consultaRutasPublicadas = "SELECT COUNT(*) AS total 
+                            FROM viajes 
+                            WHERE id_conductor = ?";
+$stmtRutas = mysqli_prepare($conexion, $consultaRutasPublicadas);
+mysqli_stmt_bind_param($stmtRutas, "i", $idUsuario);
+mysqli_stmt_execute($stmtRutas);
+$resultadoRutas = mysqli_stmt_get_result($stmtRutas);
+$rutasPublicadas = mysqli_fetch_assoc($resultadoRutas)["total"];
+
+$consultaUsuariosRegistrados = "SELECT COUNT(*) AS total FROM usuarios";
+$resultadoUsuariosRegistrados = mysqli_query($conexion, $consultaUsuariosRegistrados);
+$usuariosRegistrados = mysqli_fetch_assoc($resultadoUsuariosRegistrados)["total"];
+
+$consultaViajesRecientes = "SELECT viajes.punto_salida,
+                                   viajes.destino,
+                                   viajes.fecha_hora,
+                                   viajes.asientos_disponibles,
+                                   viajes.estado,
+                                   usuarios.nombre AS nombre_conductor
+                            FROM viajes
+                            INNER JOIN usuarios ON viajes.id_conductor = usuarios.id_usuario
+                            WHERE viajes.estado = 'Activo'
+                            ORDER BY viajes.fecha_hora ASC
+                            LIMIT 3";
+
+$resultadoViajesRecientes = mysqli_query($conexion, $consultaViajesRecientes);
+
+$consultaActividad = "SELECT viajes.punto_salida,
+                            viajes.destino,
+                            viajes.fecha_hora,
+                            viajes.estado,
+                            'Viaje publicado' AS tipo
+                     FROM viajes
+                     WHERE id_conductor = ?
+                     
+                     UNION
+                     
+                     SELECT viajes.punto_salida,
+                            viajes.destino,
+                            solicitudes.fecha_solicitud AS fecha_hora,
+                            solicitudes.estado_solicitud AS estado,
+                            'Solicitud' AS tipo
+                     FROM solicitudes
+                     INNER JOIN viajes ON solicitudes.id_viaje = viajes.id_viaje
+                     WHERE solicitudes.id_pasajero = ?
+                     
+                     ORDER BY fecha_hora DESC
+                     LIMIT 4";
+
+$stmtActividad = mysqli_prepare($conexion, $consultaActividad);
+mysqli_stmt_bind_param($stmtActividad, "ii", $idUsuario, $idUsuario);
+mysqli_stmt_execute($stmtActividad);
+$resultadoActividad = mysqli_stmt_get_result($stmtActividad);
 
 ?>
 <!DOCTYPE html>
@@ -33,7 +99,8 @@ $tipoUsuario = $_SESSION["tipo_usuario"];
             <a href="index.html">Inicio</a>
             <a href="dashboard.php" class="nav-btn">Dashboard</a>
             <a href="viajes.php">Viajes</a>
-            <a href="#">Solicitudes</a>
+            <a href="publicar-viaje.php">Publicar viaje</a>
+            <a href="solicitudes.php">Solicitudes</a>
             <a href="perfil.php">Perfil</a>
             <a href="php/logout.php" class="logout-icon" title="Cerrar sesión">
                 <svg viewBox="0 0 24 24">
@@ -71,25 +138,25 @@ $tipoUsuario = $_SESSION["tipo_usuario"];
         <section class="dashboard-stats">
             <article class="dashboard-card card">
                 <span>Viajes disponibles</span>
-                <strong>12</strong>
-                <p>Rutas activas publicadas para hoy.</p>
+                <strong><?php echo $viajesDisponibles; ?></strong>
+                <p>Rutas activas publicadas en la plataforma.</p>
             </article>
 
             <article class="dashboard-card card">
                 <span>Solicitudes pendientes</span>
-                <strong>4</strong>
+                <strong><?php echo $solicitudesPendientes; ?></strong>
                 <p>Solicitudes esperando respuesta.</p>
             </article>
 
             <article class="dashboard-card card">
                 <span>Rutas publicadas</span>
-                <strong>6</strong>
-                <p>Viajes creados por conductores.</p>
+                <strong><?php echo $rutasPublicadas; ?></strong>
+                <p>Viajes creados por el usuario activo.</p>
             </article>
 
             <article class="dashboard-card card">
                 <span>Usuarios registrados</span>
-                <strong>28</strong>
+                <strong><?php echo $usuariosRegistrados; ?></strong>
                 <p>Personas activas en la plataforma.</p>
             </article>
         </section>
@@ -101,32 +168,35 @@ $tipoUsuario = $_SESSION["tipo_usuario"];
 
                 <div class="dashboard-list">
 
-                    <div class="dashboard-item">
-                        <div>
-                            <strong>Heredia → Universidad Fidélitas</strong>
-                            <p>Salida: 7:00 a.m. | Espacios disponibles: 3</p>
-                        </div>
+                    <?php if (mysqli_num_rows($resultadoViajesRecientes) > 0) { ?>
 
-                        <span class="status">Disponible</span>
-                    </div>
+                        <?php while ($viaje = mysqli_fetch_assoc($resultadoViajesRecientes)) { ?>
 
-                    <div class="dashboard-item">
-                        <div>
-                            <strong>Alajuela → San José</strong>
-                            <p>Salida: 6:30 a.m. | Espacios disponibles: 2</p>
-                        </div>
+                            <div class="dashboard-item">
+                                <div>
+                                    <strong>
+                                        <?php echo $viaje["punto_salida"]; ?> → <?php echo $viaje["destino"]; ?>
+                                    </strong>
 
-                        <span class="status">Disponible</span>
-                    </div>
+                                    <p>
+                                        Conductor: <?php echo $viaje["nombre_conductor"]; ?> |
+                                        Fecha y hora: <?php echo $viaje["fecha_hora"]; ?> |
+                                        Espacios disponibles: <?php echo $viaje["asientos_disponibles"]; ?>
+                                    </p>
+                                </div>
 
-                    <div class="dashboard-item">
-                        <div>
-                            <strong>San Pedro → Heredia</strong>
-                            <p>Salida: 5:00 p.m. | Espacios disponibles: 4</p>
-                        </div>
+                                <span class="status">
+                                    <?php echo $viaje["estado"]; ?>
+                                </span>
+                            </div>
 
-                        <span class="status">Disponible</span>
-                    </div>
+                        <?php } ?>
+
+                    <?php } else { ?>
+
+                        <p>No hay viajes recientes disponibles.</p>
+
+                    <?php } ?>
 
                 </div>
             </article>
@@ -136,9 +206,9 @@ $tipoUsuario = $_SESSION["tipo_usuario"];
 
                 <div class="quick-actions">
                     <a href="viajes.php" class="btn btn-primary full">Buscar viaje</a>
-<a href="publicar-viaje.php" class="btn btn-secondary full">Publicar ruta</a>
-                    <a href="#" class="btn btn-secondary full">Ver solicitudes</a>
-                    <a href="#" class="btn btn-secondary full">Editar perfil</a>
+                    <a href="publicar-viaje.php" class="btn btn-secondary full">Publicar ruta</a>
+                    <a href="solicitudes.php" class="btn btn-secondary full">Ver solicitudes</a>
+                    <a href="perfil.php" class="btn btn-secondary full">Editar perfil</a>
                 </div>
             </article>
 
@@ -158,33 +228,26 @@ $tipoUsuario = $_SESSION["tipo_usuario"];
                 </thead>
 
                 <tbody>
-                    <tr>
-                        <td>31/07/2026</td>
-                        <td>Heredia - San Pedro</td>
-                        <td>Solicitud</td>
-                        <td>Aprobada</td>
-                    </tr>
+                    <?php if (mysqli_num_rows($resultadoActividad) > 0) { ?>
 
-                    <tr>
-                        <td>31/07/2026</td>
-                        <td>Alajuela - San José</td>
-                        <td>Viaje publicado</td>
-                        <td>Activo</td>
-                    </tr>
+                        <?php while ($actividad = mysqli_fetch_assoc($resultadoActividad)) { ?>
 
-                    <tr>
-                        <td>30/07/2026</td>
-                        <td>Cartago - San José</td>
-                        <td>Solicitud</td>
-                        <td>Pendiente</td>
-                    </tr>
+                            <tr>
+                                <td><?php echo $actividad["fecha_hora"]; ?></td>
+                                <td><?php echo $actividad["punto_salida"]; ?> - <?php echo $actividad["destino"]; ?></td>
+                                <td><?php echo $actividad["tipo"]; ?></td>
+                                <td><?php echo $actividad["estado"]; ?></td>
+                            </tr>
 
-                    <tr>
-                        <td>30/07/2026</td>
-                        <td>Heredia - Fidélitas</td>
-                        <td>Viaje reservado</td>
-                        <td>Completado</td>
-                    </tr>
+                        <?php } ?>
+
+                    <?php } else { ?>
+
+                        <tr>
+                            <td colspan="4">No hay actividad registrada todavía.</td>
+                        </tr>
+
+                    <?php } ?>
                 </tbody>
             </table>
         </section>
