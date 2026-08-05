@@ -739,6 +739,17 @@ section.container {
     fill: white;
 }
 
+.acciones-viaje {
+    display: grid;
+    gap: 10px;
+    min-width: 150px;
+}
+
+.acciones-viaje .btn {
+    padding: 10px 14px;
+    font-size: 14px;
+}
+
 @media (max-width: 1024px) {
     .hero,
     .grid-4 {

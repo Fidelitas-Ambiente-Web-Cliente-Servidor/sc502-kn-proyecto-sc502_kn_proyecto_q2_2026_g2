@@ -49,7 +49,7 @@ $resultado = mysqli_query($conexion, $consulta);
             <a href="dashboard.php">Dashboard</a>
             <a href="viajes.php" class="nav-btn">Viajes</a>
             <a href="publicar-viaje.php">Publicar viaje</a>
-            <a href="#">Solicitudes</a>
+            <a href="solicitudes.php">Solicitudes</a>
             <a href="#">Perfil</a>
             <a href="php/logout.php" class="logout-icon" title="Cerrar sesión">
                 <svg viewBox="0 0 24 24">
@@ -111,9 +111,15 @@ $resultado = mysqli_query($conexion, $consulta);
                                 </p>
                             </div>
 
-                            <span class="status">
-                                <?php echo $viaje["estado"]; ?>
-                            </span>
+                            <div class="acciones-viaje">
+                                <span class="status">
+                                    <?php echo $viaje["estado"]; ?>
+                                </span>
+
+                                <a href="php/solicitar_ride.php?id=<?php echo $viaje["id_viaje"]; ?>" class="btn btn-primary">
+                                    Solicitar ride
+                                </a>
+                            </div>
                         </div>
 
                     <?php } ?>
@@ -139,10 +145,34 @@ $resultado = mysqli_query($conexion, $consulta);
 
         if (mensajeViajes) {
             const publicado = parametrosViajes.get("publicado");
+            const error = parametrosViajes.get("error");
 
             if (publicado === "ok") {
                 mensajeViajes.textContent = "Viaje publicado correctamente.";
                 mensajeViajes.style.color = "green";
+            }
+
+            if (error === "propio") {
+                mensajeViajes.textContent = "No puede solicitar un viaje publicado por usted mismo.";
+                mensajeViajes.style.color = "red";
+            } else if (error === "duplicada") {
+                mensajeViajes.textContent = "Ya existe una solicitud para este viaje.";
+                mensajeViajes.style.color = "red";
+            } else if (error === "sinasientos") {
+                mensajeViajes.textContent = "Este viaje ya no tiene espacios disponibles.";
+                mensajeViajes.style.color = "red";
+            } else if (error === "noactivo") {
+                mensajeViajes.textContent = "Este viaje no se encuentra activo.";
+                mensajeViajes.style.color = "red";
+            } else if (error === "noexiste") {
+                mensajeViajes.textContent = "El viaje seleccionado no existe.";
+                mensajeViajes.style.color = "red";
+            } else if (error === "sinviaje") {
+                mensajeViajes.textContent = "Debe seleccionar un viaje válido.";
+                mensajeViajes.style.color = "red";
+            } else if (error === "bd") {
+                mensajeViajes.textContent = "Ocurrió un error al registrar la solicitud.";
+                mensajeViajes.style.color = "red";
             }
         }
     </script>
