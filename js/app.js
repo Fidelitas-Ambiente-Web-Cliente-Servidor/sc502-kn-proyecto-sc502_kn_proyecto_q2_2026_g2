@@ -10,14 +10,13 @@ document.addEventListener("DOMContentLoaded", function () {
     redirigirSiYaInicioSesion();
 
     if (formularioLogin) {
-        formularioLogin.addEventListener("submit", iniciarSesion);
         cargarCorreoRecordado();
     }
 
     //if (formularioRegistro) {
     //formularioRegistro.addEventListener("submit", registrarUsuario);
     //}
-    
+
 
     if (usuarioDashboard) {
         cargarUsuarioDashboard();
