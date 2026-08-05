@@ -21,6 +21,7 @@
             <a href="login.html">Iniciar sesión</a>
             <a href="registro.html" class="nav-btn">Registrarse</a>
         </nav>
+
         <div id="usuarioHeader" class="usuario-header"></div>
     </header>
 
@@ -32,18 +33,18 @@
                 Regístrate para buscar viajes, publicar rutas y compartir transporte.
             </p>
 
-            <form id="formRegistro" class="form">
+            <form id="formRegistro" class="form" action="php/registro.php" method="POST">
                 <label for="nombre">Nombre completo</label>
-               <input type="text" id="nombre" placeholder="Ingrese su nombre completo" autocomplete="off">
+                <input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre completo" autocomplete="off">
 
                 <label for="correo">Correo electrónico</label>
-                <input type="email" id="correo" placeholder="ejemplo@correo.com">
+                <input type="email" id="correo" name="correo" placeholder="ejemplo@correo.com">
 
                 <label for="telefono">Teléfono</label>
-                <input type="tel" id="telefono" placeholder="Ingrese su teléfono" maxlength="8" inputmode="numeric" autocomplete="off">
+                <input type="tel" id="telefono" name="telefono" placeholder="Ingrese su teléfono" maxlength="8" inputmode="numeric" autocomplete="off">
 
                 <label for="tipoUsuario">Tipo de usuario</label>
-                <select id="tipoUsuario">
+                <select id="tipoUsuario" name="tipoUsuario">
                     <option value="">Seleccione una opción</option>
                     <option value="Conductor">Conductor</option>
                     <option value="Pasajero">Pasajero</option>
@@ -51,10 +52,10 @@
                 </select>
 
                 <label for="password">Contraseña</label>
-                <input type="password" id="password" placeholder="Ingrese una contraseña">
+                <input type="password" id="password" name="password" placeholder="Ingrese una contraseña">
 
                 <label for="confirmPassword">Confirmar contraseña</label>
-                <input type="password" id="confirmPassword" placeholder="Repita la contraseña">
+                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Repita la contraseña">
 
                 <button type="submit" class="btn btn-primary full">
                     Registrarse
@@ -69,6 +70,44 @@
             </p>
         </section>
     </main>
+
+    <script>
+        const parametrosRegistro = new URLSearchParams(window.location.search);
+        const mensajeRegistro = document.getElementById("mensajeRegistro");
+
+        if (mensajeRegistro) {
+            const error = parametrosRegistro.get("error");
+
+            if (error === "campos") {
+                mensajeRegistro.textContent = "Debe completar todos los campos.";
+                mensajeRegistro.style.color = "red";
+            } else if (error === "nombre") {
+                mensajeRegistro.textContent = "El nombre solo puede contener letras.";
+                mensajeRegistro.style.color = "red";
+            } else if (error === "correo") {
+                mensajeRegistro.textContent = "Debe ingresar un correo válido.";
+                mensajeRegistro.style.color = "red";
+            } else if (error === "telefono") {
+                mensajeRegistro.textContent = "El teléfono debe tener 8 dígitos.";
+                mensajeRegistro.style.color = "red";
+            } else if (error === "tipo") {
+                mensajeRegistro.textContent = "Debe seleccionar un tipo de usuario válido.";
+                mensajeRegistro.style.color = "red";
+            } else if (error === "password") {
+                mensajeRegistro.textContent = "La contraseña debe tener mínimo 6 caracteres.";
+                mensajeRegistro.style.color = "red";
+            } else if (error === "confirmacion") {
+                mensajeRegistro.textContent = "Las contraseñas no coinciden.";
+                mensajeRegistro.style.color = "red";
+            } else if (error === "existe") {
+                mensajeRegistro.textContent = "Ya existe una cuenta con ese correo.";
+                mensajeRegistro.style.color = "red";
+            } else if (error === "bd") {
+                mensajeRegistro.textContent = "Ocurrió un error al registrar el usuario.";
+                mensajeRegistro.style.color = "red";
+            }
+        }
+    </script>
 
     <script src="js/app.js"></script>
 </body>

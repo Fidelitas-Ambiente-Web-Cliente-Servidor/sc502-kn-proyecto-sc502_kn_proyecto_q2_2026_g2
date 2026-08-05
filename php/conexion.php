@@ -1,9 +1,6 @@
 <?php
 
-$servidor = "localhost";
-$usuario = "root";
-$password = "";
-$baseDatos = "carpoolmatch";
+include "config_local.php";
 
 $conexion = mysqli_connect($servidor, $usuario, $password, $baseDatos);
 

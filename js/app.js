@@ -14,9 +14,10 @@ document.addEventListener("DOMContentLoaded", function () {
         cargarCorreoRecordado();
     }
 
-    if (formularioRegistro) {
-        formularioRegistro.addEventListener("submit", registrarUsuario);
-    }
+    //if (formularioRegistro) {
+    //formularioRegistro.addEventListener("submit", registrarUsuario);
+    //}
+    
 
     if (usuarioDashboard) {
         cargarUsuarioDashboard();
