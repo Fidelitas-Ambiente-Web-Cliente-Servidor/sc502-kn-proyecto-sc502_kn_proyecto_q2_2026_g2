@@ -49,6 +49,7 @@ $nombreUsuario = $usuario["nombre"];
             <a href="publicar-viaje.php">Publicar viaje</a>
             <a href="solicitudes.php">Mis solicitudes</a>
             <a href="solicitudes-recibidas.php">Recibidas</a>
+            <a href="historial.php">Historial</a>
             <a href="perfil.php" class="nav-btn">Perfil</a>
             <a href="php/logout.php" class="logout-icon" title="Cerrar sesión">
                 <svg viewBox="0 0 24 24">

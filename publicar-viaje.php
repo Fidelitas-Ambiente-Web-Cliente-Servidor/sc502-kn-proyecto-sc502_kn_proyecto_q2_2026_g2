@@ -35,6 +35,7 @@ $tipoUsuario = $_SESSION["tipo_usuario"];
             <a href="viajes.php">Viajes</a>
             <a href="publicar-viaje.php" class="nav-btn">Publicar viaje</a>
             <a href="#">Solicitudes</a>
+            <a href="historial.php">Historial</a>
             <a href="perfil.php">Perfil</a>
             <a href="php/logout.php" class="logout-icon" title="Cerrar sesión">
                 <svg viewBox="0 0 24 24">
