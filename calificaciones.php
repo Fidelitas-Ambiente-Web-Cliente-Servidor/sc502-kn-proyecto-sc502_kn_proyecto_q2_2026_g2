@@ -10,22 +10,82 @@ if (!isset($_SESSION["id_usuario"])) {
 
 $idUsuario = $_SESSION["id_usuario"];
 $nombreUsuario = $_SESSION["nombre"];
+$tipoUsuario = $_SESSION["tipo_usuario"];
 
-$consultaViajes = "SELECT viajes.id_viaje,
-                          viajes.punto_salida,
-                          viajes.destino,
-                          viajes.fecha_hora,
-                          conductor.id_usuario AS id_conductor,
-                          conductor.nombre AS nombre_conductor
-                   FROM solicitudes
-                   INNER JOIN viajes ON solicitudes.id_viaje = viajes.id_viaje
-                   INNER JOIN usuarios AS conductor ON viajes.id_conductor = conductor.id_usuario
-                   WHERE solicitudes.id_pasajero = ?
-                   AND solicitudes.estado_solicitud = 'Aprobada'
-                   ORDER BY viajes.fecha_hora DESC";
+if ($tipoUsuario == "Pasajero") {
 
-$stmtViajes = mysqli_prepare($conexion, $consultaViajes);
-mysqli_stmt_bind_param($stmtViajes, "i", $idUsuario);
+    $consultaViajes = "SELECT DISTINCT viajes.id_viaje,
+                              viajes.punto_salida,
+                              viajes.destino,
+                              viajes.fecha_hora,
+                              conductor.id_usuario AS id_evaluado,
+                              conductor.nombre AS nombre_evaluado,
+                              'Conductor' AS tipo_evaluado
+                       FROM solicitudes
+                       INNER JOIN viajes ON solicitudes.id_viaje = viajes.id_viaje
+                       INNER JOIN usuarios AS conductor ON viajes.id_conductor = conductor.id_usuario
+                       WHERE solicitudes.id_pasajero = ?
+                       AND solicitudes.estado_solicitud = 'Aprobada'
+                       ORDER BY viajes.fecha_hora DESC";
+
+    $stmtViajes = mysqli_prepare($conexion, $consultaViajes);
+    mysqli_stmt_bind_param($stmtViajes, "i", $idUsuario);
+
+} else if ($tipoUsuario == "Conductor") {
+
+    $consultaViajes = "SELECT DISTINCT viajes.id_viaje,
+                              viajes.punto_salida,
+                              viajes.destino,
+                              viajes.fecha_hora,
+                              pasajero.id_usuario AS id_evaluado,
+                              pasajero.nombre AS nombre_evaluado,
+                              'Pasajero' AS tipo_evaluado
+                       FROM solicitudes
+                       INNER JOIN viajes ON solicitudes.id_viaje = viajes.id_viaje
+                       INNER JOIN usuarios AS pasajero ON solicitudes.id_pasajero = pasajero.id_usuario
+                       WHERE viajes.id_conductor = ?
+                       AND solicitudes.estado_solicitud = 'Aprobada'
+                       ORDER BY viajes.fecha_hora DESC";
+
+    $stmtViajes = mysqli_prepare($conexion, $consultaViajes);
+    mysqli_stmt_bind_param($stmtViajes, "i", $idUsuario);
+
+} else {
+
+    $consultaViajes = "SELECT DISTINCT viajes.id_viaje,
+                              viajes.punto_salida,
+                              viajes.destino,
+                              viajes.fecha_hora,
+                              conductor.id_usuario AS id_evaluado,
+                              conductor.nombre AS nombre_evaluado,
+                              'Conductor' AS tipo_evaluado
+                       FROM solicitudes
+                       INNER JOIN viajes ON solicitudes.id_viaje = viajes.id_viaje
+                       INNER JOIN usuarios AS conductor ON viajes.id_conductor = conductor.id_usuario
+                       WHERE solicitudes.id_pasajero = ?
+                       AND solicitudes.estado_solicitud = 'Aprobada'
+
+                       UNION
+
+                       SELECT DISTINCT viajes.id_viaje,
+                              viajes.punto_salida,
+                              viajes.destino,
+                              viajes.fecha_hora,
+                              pasajero.id_usuario AS id_evaluado,
+                              pasajero.nombre AS nombre_evaluado,
+                              'Pasajero' AS tipo_evaluado
+                       FROM solicitudes
+                       INNER JOIN viajes ON solicitudes.id_viaje = viajes.id_viaje
+                       INNER JOIN usuarios AS pasajero ON solicitudes.id_pasajero = pasajero.id_usuario
+                       WHERE viajes.id_conductor = ?
+                       AND solicitudes.estado_solicitud = 'Aprobada'
+
+                       ORDER BY fecha_hora DESC";
+
+    $stmtViajes = mysqli_prepare($conexion, $consultaViajes);
+    mysqli_stmt_bind_param($stmtViajes, "ii", $idUsuario, $idUsuario);
+}
+
 mysqli_stmt_execute($stmtViajes);
 $resultadoViajes = mysqli_stmt_get_result($stmtViajes);
 
@@ -68,19 +128,34 @@ $resultadoCalificaciones = mysqli_stmt_get_result($stmtCalificaciones);
         <nav class="nav">
             <a href="index.php">Inicio</a>
             <a href="dashboard.php">Dashboard</a>
-            <a href="viajes.php">Viajes</a>
-            <a href="publicar-viaje.php">Publicar viaje</a>
-            <a href="solicitudes.php">Mis solicitudes</a>
-            <a href="solicitudes-recibidas.php">Recibidas</a>
-            <a href="historial.php">Historial</a>
-            <a href="calificaciones.php" class="nav-btn">Calificaciones</a>
-            <a href="perfil.php">Perfil</a>
-            <a href="php/logout.php" class="logout-icon" title="Cerrar sesión">
-                <svg viewBox="0 0 24 24">
-                    <path d="M10 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h5v-2H5V5h5V3z"></path>
-                    <path d="M16.6 17.6 15.2 16.2 18.4 13H8v-2h10.4l-3.2-3.2 1.4-1.4L22.2 12z"></path>
-                </svg>
-            </a>
+
+            <div class="menu-dropdown">
+                <span class="menu-btn">Viajes ▾</span>
+
+                <div class="menu-content">
+                    <?php if ($tipoUsuario == "Pasajero" || $tipoUsuario == "Ambos") { ?>
+                        <a href="viajes.php">Buscar viajes</a>
+                        <a href="solicitudes.php">Mis solicitudes</a>
+                    <?php } ?>
+
+                    <?php if ($tipoUsuario == "Conductor" || $tipoUsuario == "Ambos") { ?>
+                        <a href="publicar-viaje.php">Publicar viaje</a>
+                        <a href="solicitudes-recibidas.php">Solicitudes recibidas</a>
+                    <?php } ?>
+
+                    <a href="historial.php">Historial</a>
+                    <a href="calificaciones.php">Calificaciones</a>
+                </div>
+            </div>
+
+            <div class="menu-dropdown">
+                <span class="menu-btn">Cuenta ▾</span>
+
+                <div class="menu-content">
+                    <a href="perfil.php">Perfil</a>
+                    <a href="php/logout.php">Cerrar sesión</a>
+                </div>
+            </div>
         </nav>
 
         <div class="usuario-header">
@@ -97,31 +172,34 @@ $resultadoCalificaciones = mysqli_stmt_get_result($stmtCalificaciones);
                 <h2>Calificaciones de usuarios</h2>
 
                 <p>
-                    En esta sección puede calificar a conductores de viajes aprobados y consultar las calificaciones recibidas.
+                    En esta sección puede calificar usuarios con los que compartió un viaje aprobado y consultar las
+                    calificaciones recibidas.
                 </p>
             </div>
 
             <div class="dashboard-user">
-                <strong>Acción rápida</strong>
-                <a href="historial.php" class="btn btn-primary full">Ver historial</a>
+                <strong>Tipo de usuario</strong>
+                <span><?php echo $tipoUsuario; ?></span>
             </div>
         </section>
 
         <section class="card dashboard-section">
-            <h3>Calificar conductor</h3>
+            <h3>Realizar calificación</h3>
 
             <p id="mensajeCalificacion" class="message"></p>
 
             <form class="form" action="php/guardar_calificacion.php" method="POST">
                 <label for="viaje">Viaje aprobado</label>
+
                 <select id="viaje" name="viaje">
                     <option value="">Seleccione un viaje</option>
 
                     <?php while ($viaje = mysqli_fetch_assoc($resultadoViajes)) { ?>
 
-                        <option value="<?php echo $viaje["id_viaje"] . "|" . $viaje["id_conductor"]; ?>">
+                        <option value="<?php echo $viaje["id_viaje"] . "|" . $viaje["id_evaluado"]; ?>">
                             <?php echo $viaje["punto_salida"]; ?> → <?php echo $viaje["destino"]; ?> |
-                            Conductor: <?php echo $viaje["nombre_conductor"]; ?> |
+                            <?php echo $viaje["tipo_evaluado"]; ?>:
+                            <?php echo $viaje["nombre_evaluado"]; ?> |
                             Fecha: <?php echo $viaje["fecha_hora"]; ?>
                         </option>
 
@@ -219,6 +297,12 @@ $resultadoCalificaciones = mysqli_stmt_get_result($stmtCalificaciones);
                 mensajeCalificacion.style.color = "red";
             } else if (error === "duplicada") {
                 mensajeCalificacion.textContent = "Ya calificó este viaje anteriormente.";
+                mensajeCalificacion.style.color = "red";
+            } else if (error === "permiso") {
+                mensajeCalificacion.textContent = "No tiene permiso para calificar ese viaje.";
+                mensajeCalificacion.style.color = "red";
+            } else if (error === "propio") {
+                mensajeCalificacion.textContent = "No puede calificarse a usted mismo.";
                 mensajeCalificacion.style.color = "red";
             } else if (error === "bd") {
                 mensajeCalificacion.textContent = "Ocurrió un error al guardar la calificación.";

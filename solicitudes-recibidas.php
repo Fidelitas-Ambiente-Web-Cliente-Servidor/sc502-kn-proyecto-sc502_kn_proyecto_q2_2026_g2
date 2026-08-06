@@ -10,6 +10,12 @@ if (!isset($_SESSION["id_usuario"])) {
 
 $idUsuario = $_SESSION["id_usuario"];
 $nombreUsuario = $_SESSION["nombre"];
+$tipoUsuario = $_SESSION["tipo_usuario"];
+
+if ($tipoUsuario != "Conductor" && $tipoUsuario != "Ambos") {
+    header("Location: dashboard.php?error=rol");
+    exit();
+}
 
 $consulta = "SELECT solicitudes.id_solicitud,
                     solicitudes.estado_solicitud,
@@ -54,21 +60,33 @@ $resultado = mysqli_stmt_get_result($stmt);
         <nav class="nav">
             <a href="index.php">Inicio</a>
             <a href="dashboard.php">Dashboard</a>
-            <a href="viajes.php">Viajes</a>
-            <a href="publicar-viaje.php">Publicar viaje</a>
-            <a href="solicitudes.php">Mis solicitudes</a>
-            <a href="solicitudes-recibidas.php" class="nav-btn">Recibidas</a>
-            <a href="historial.php">Historial</a>
-            <a href="calificaciones.php">Calificaciones</a>
-            <a href="perfil.php">Perfil</a>
-            <a href="php/logout.php" class="logout-icon" title="Cerrar sesión">
-                <svg viewBox="0 0 24 24">
-                    <path d="M10 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h5v-2H5V5h5V3z"></path>
-                    <path d="M16.6 17.6 15.2 16.2 18.4 13H8v-2h10.4l-3.2-3.2 1.4-1.4L22.2 12z"></path>
-                </svg>
-            </a>
-        </nav>
 
+            <div class="menu-dropdown">
+                <span class="menu-btn">Viajes ▾</span>
+
+                <div class="menu-content">
+                    <?php if ($tipoUsuario == "Ambos") { ?>
+                        <a href="viajes.php">Buscar viajes</a>
+                        <a href="solicitudes.php">Mis solicitudes</a>
+                    <?php } ?>
+
+                    <a href="publicar-viaje.php">Publicar viaje</a>
+                    <a href="solicitudes-recibidas.php">Solicitudes recibidas</a>
+                    <a href="historial.php">Historial</a>
+                    <a href="calificaciones.php">Calificaciones</a>
+                </div>
+            </div>
+
+            <div class="menu-dropdown">
+                <span class="menu-btn">Cuenta ▾</span>
+
+                <div class="menu-content">
+                    <a href="perfil.php">Perfil</a>
+                    <a href="php/logout.php">Cerrar sesión</a>
+                </div>
+            </div>
+        </nav>
+        
         <div class="usuario-header">
             👤 Bienvenido, <span><?php echo $nombreUsuario; ?></span>
         </div>
@@ -129,11 +147,13 @@ $resultado = mysqli_stmt_get_result($stmt);
 
                                 <?php if ($solicitud["estado_solicitud"] == "Pendiente") { ?>
 
-                                    <a href="php/actualizar_solicitud.php?id=<?php echo $solicitud["id_solicitud"]; ?>&estado=Aprobada" class="btn btn-primary">
+                                    <a href="php/actualizar_solicitud.php?id=<?php echo $solicitud["id_solicitud"]; ?>&estado=Aprobada"
+                                        class="btn btn-primary">
                                         Aprobar
                                     </a>
 
-                                    <a href="php/actualizar_solicitud.php?id=<?php echo $solicitud["id_solicitud"]; ?>&estado=Rechazada" class="btn btn-secondary">
+                                    <a href="php/actualizar_solicitud.php?id=<?php echo $solicitud["id_solicitud"]; ?>&estado=Rechazada"
+                                        class="btn btn-secondary">
                                         Rechazar
                                     </a>
 

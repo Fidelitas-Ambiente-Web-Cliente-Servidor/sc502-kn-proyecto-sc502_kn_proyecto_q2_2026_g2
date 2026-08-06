@@ -6,9 +6,15 @@ $haySesion = isset($_SESSION["id_usuario"]);
 $nombreUsuario = "";
 $tipoUsuario = "";
 
+$puedeBuscarViajes = false;
+$puedePublicarViajes = false;
+
 if ($haySesion) {
     $nombreUsuario = $_SESSION["nombre"];
     $tipoUsuario = $_SESSION["tipo_usuario"];
+
+    $puedeBuscarViajes = ($tipoUsuario == "Pasajero" || $tipoUsuario == "Ambos");
+    $puedePublicarViajes = ($tipoUsuario == "Conductor" || $tipoUsuario == "Ambos");
 }
 
 ?>
@@ -32,26 +38,59 @@ if ($haySesion) {
 
         <nav class="nav">
             <a href="index.php" class="nav-btn">Inicio</a>
-            <a href="acerca.html">Acerca de nosotros</a>
-            <a href="faq.html">Preguntas frecuentes</a>
-            <a href="contacto.html">Contacto</a>
+
+            <div class="menu-dropdown">
+                <span class="menu-btn">Información ▾</span>
+
+                <div class="menu-content">
+                    <a href="acerca.php">Acerca de nosotros</a>
+                    <a href="faq.php">Preguntas frecuentes</a>
+                    <a href="contacto.php">Contacto</a>
+                </div>
+            </div>
 
             <?php if ($haySesion) { ?>
 
                 <a href="dashboard.php">Dashboard</a>
-                <a href="viajes.php">Viajes</a>
-                <a href="perfil.php">Perfil</a>
-                <a href="php/logout.php" class="logout-icon" title="Cerrar sesión">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M10 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h5v-2H5V5h5V3z"></path>
-                        <path d="M16.6 17.6 15.2 16.2 18.4 13H8v-2h10.4l-3.2-3.2 1.4-1.4L22.2 12z"></path>
-                    </svg>
-                </a>
+
+                <div class="menu-dropdown">
+                    <span class="menu-btn">Viajes ▾</span>
+
+                    <div class="menu-content">
+                        <?php if ($puedeBuscarViajes) { ?>
+                            <a href="viajes.php">Buscar viajes</a>
+                            <a href="solicitudes.php">Mis solicitudes</a>
+                        <?php } ?>
+
+                        <?php if ($puedePublicarViajes) { ?>
+                            <a href="publicar-viaje.php">Publicar viaje</a>
+                            <a href="solicitudes-recibidas.php">Solicitudes recibidas</a>
+                        <?php } ?>
+
+                        <a href="historial.php">Historial</a>
+                        <a href="calificaciones.php">Calificaciones</a>
+                    </div>
+                </div>
+
+                <div class="menu-dropdown">
+                    <span class="menu-btn">Cuenta ▾</span>
+
+                    <div class="menu-content">
+                        <a href="perfil.php">Perfil</a>
+                        <a href="php/logout.php">Cerrar sesión</a>
+                    </div>
+                </div>
 
             <?php } else { ?>
 
-                <a href="login.html">Iniciar sesión</a>
-                <a href="registro.html" class="nav-btn">Registrarse</a>
+                <div class="menu-dropdown">
+                    <span class="menu-btn">Cuenta ▾</span>
+
+                    <div class="menu-content">
+                        <a href="login.html">Iniciar sesión</a>
+                        <a href="registro.html">Registrarse</a>
+                    </div>
+                </div>
 
             <?php } ?>
         </nav>
@@ -82,7 +121,14 @@ if ($haySesion) {
                     <?php if ($haySesion) { ?>
 
                         <a href="dashboard.php" class="btn btn-primary">Ir al dashboard</a>
-                        <a href="viajes.php" class="btn btn-secondary">Buscar viajes</a>
+
+                        <?php if ($puedeBuscarViajes) { ?>
+                            <a href="viajes.php" class="btn btn-secondary">Buscar viajes</a>
+                        <?php } ?>
+
+                        <?php if ($puedePublicarViajes) { ?>
+                            <a href="publicar-viaje.php" class="btn btn-secondary">Publicar viaje</a>
+                        <?php } ?>
 
                     <?php } else { ?>
 
@@ -149,8 +195,10 @@ if ($haySesion) {
                     </div>
                 </div>
 
-                <?php if ($haySesion) { ?>
+                <?php if ($haySesion && $puedeBuscarViajes) { ?>
                     <a href="viajes.php" class="btn btn-primary trip-btn">Ver viajes</a>
+                <?php } else if ($haySesion && $puedePublicarViajes) { ?>
+                    <a href="publicar-viaje.php" class="btn btn-primary trip-btn">Publicar viaje</a>
                 <?php } else { ?>
                     <a href="login.html" class="btn btn-primary trip-btn">Iniciar sesión</a>
                 <?php } ?>
@@ -165,7 +213,7 @@ if ($haySesion) {
                 Ingrese un punto de salida y un destino para consultar viajes disponibles dentro de la plataforma.
             </p>
 
-            <form class="search-form" action="<?php echo $haySesion ? 'viajes.php' : 'login.html'; ?>" method="GET">
+            <form class="search-form" action="<?php echo ($haySesion && $puedeBuscarViajes) ? 'viajes.php' : 'login.html'; ?>" method="GET">
                 <input type="text" name="salida" placeholder="Punto de salida">
                 <input type="text" name="destino" placeholder="Destino">
 
@@ -260,11 +308,15 @@ if ($haySesion) {
 
                 <div class="actions">
                     <?php if ($haySesion) { ?>
+
                         <a href="dashboard.php" class="btn btn-primary">Entrar al sistema</a>
                         <a href="historial.php" class="btn btn-secondary">Ver historial</a>
+
                     <?php } else { ?>
+
                         <a href="registro.html" class="btn btn-primary">Crear cuenta</a>
                         <a href="login.html" class="btn btn-secondary">Iniciar sesión</a>
+
                     <?php } ?>
                 </div>
             </div>
