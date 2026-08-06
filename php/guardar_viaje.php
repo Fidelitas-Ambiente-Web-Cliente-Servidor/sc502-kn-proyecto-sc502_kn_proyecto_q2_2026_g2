@@ -8,6 +8,13 @@ if (!isset($_SESSION["id_usuario"])) {
     exit();
 }
 
+$tipoUsuario = $_SESSION["tipo_usuario"];
+
+if ($tipoUsuario != "Conductor" && $tipoUsuario != "Ambos") {
+    header("Location: ../dashboard.php?error=rol");
+    exit();
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $idConductor = $_SESSION["id_usuario"];
     $puntoSalida = trim($_POST["puntoSalida"]);
@@ -39,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     mysqli_stmt_bind_param($stmt, "isssis", $idConductor, $puntoSalida, $destino, $fechaHora, $asientos, $observaciones);
 
     if (mysqli_stmt_execute($stmt)) {
-        header("Location: ../viajes.php?publicado=ok");
+        header("Location: ../solicitudes-recibidas.php?publicado=ok");
         exit();
     } else {
         header("Location: ../publicar-viaje.php?error=bd");

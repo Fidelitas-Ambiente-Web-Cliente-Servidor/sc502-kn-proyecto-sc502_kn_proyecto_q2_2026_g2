@@ -1,10 +1,14 @@
 CREATE DATABASE IF NOT EXISTS carpoolmatch;
 USE carpoolmatch;
 
+SET FOREIGN_KEY_CHECKS = 0;
+
 DROP TABLE IF EXISTS calificaciones;
 DROP TABLE IF EXISTS solicitudes;
 DROP TABLE IF EXISTS viajes;
 DROP TABLE IF EXISTS usuarios;
+
+SET FOREIGN_KEY_CHECKS = 1;
 
 CREATE TABLE usuarios (
     id_usuario INT AUTO_INCREMENT PRIMARY KEY,
@@ -38,7 +42,8 @@ CREATE TABLE solicitudes (
     estado_solicitud ENUM('Pendiente', 'Aprobada', 'Rechazada') DEFAULT 'Pendiente',
     fecha_solicitud TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_viaje) REFERENCES viajes(id_viaje),
-    FOREIGN KEY (id_pasajero) REFERENCES usuarios(id_usuario)
+    FOREIGN KEY (id_pasajero) REFERENCES usuarios(id_usuario),
+    UNIQUE (id_viaje, id_pasajero)
 );
 
 CREATE TABLE calificaciones (
@@ -52,7 +57,8 @@ CREATE TABLE calificaciones (
     FOREIGN KEY (id_evaluador) REFERENCES usuarios(id_usuario),
     FOREIGN KEY (id_evaluado) REFERENCES usuarios(id_usuario),
     FOREIGN KEY (id_viaje) REFERENCES viajes(id_viaje),
-    CHECK (puntaje BETWEEN 1 AND 5)
+    CHECK (puntaje BETWEEN 1 AND 5),
+    UNIQUE (id_evaluador, id_evaluado, id_viaje)
 );
 
 INSERT INTO usuarios (id_usuario, nombre, correo, telefono, tipo_usuario, contrasena, reputacion, estado)

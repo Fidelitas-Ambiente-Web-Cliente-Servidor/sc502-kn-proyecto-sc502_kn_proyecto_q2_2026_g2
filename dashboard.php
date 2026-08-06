@@ -177,6 +177,14 @@ $resultadoActividad = mysqli_stmt_get_result($stmtActividad);
 
     <main class="dashboard container">
 
+        <?php if (isset($_GET["error"]) && $_GET["error"] == "rol") { ?>
+            <section class="card dashboard-section">
+                <p class="message" style="color: red;">
+                    No tiene permiso para acceder a ese módulo con su tipo de usuario actual.
+                </p>
+            </section>
+        <?php } ?>
+
         <section class="dashboard-welcome card">
             <div>
                 <span class="tag">Panel de control</span>
@@ -286,7 +294,8 @@ $resultadoActividad = mysqli_stmt_get_result($stmtActividad);
                             <div>
                                 <strong>Administra tus rutas publicadas</strong>
                                 <p>
-                                    Como conductor puedes publicar viajes y revisar las solicitudes recibidas por los pasajeros.
+                                    Como conductor puedes publicar viajes y revisar las solicitudes recibidas por los
+                                    pasajeros.
                                 </p>
                             </div>
 
@@ -297,7 +306,8 @@ $resultadoActividad = mysqli_stmt_get_result($stmtActividad);
                             <div>
                                 <strong>Solicitudes pendientes</strong>
                                 <p>
-                                    Actualmente tienes <?php echo $solicitudesConductor; ?> solicitud(es) esperando respuesta.
+                                    Actualmente tienes <?php echo $solicitudesConductor; ?> solicitud(es) esperando
+                                    respuesta.
                                 </p>
                             </div>
 

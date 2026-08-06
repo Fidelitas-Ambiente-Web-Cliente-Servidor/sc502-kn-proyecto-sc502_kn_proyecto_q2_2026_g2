@@ -8,6 +8,13 @@ if (!isset($_SESSION["id_usuario"])) {
     exit();
 }
 
+$tipoUsuario = $_SESSION["tipo_usuario"];
+
+if ($tipoUsuario != "Conductor" && $tipoUsuario != "Ambos") {
+    header("Location: ../dashboard.php?error=rol");
+    exit();
+}
+
 if (!isset($_GET["id"]) || !isset($_GET["estado"])) {
     header("Location: ../solicitudes-recibidas.php?error=datos");
     exit();
